@@ -5,7 +5,6 @@ import io
 import time
 
 #Get 1st degree neighbour of origin article
-#When use with local endpoint, remove the line '?linkto  a  owl:Thing.' because local database does not have that
 sparql = SPARQLWrapper("http://dbpedia.org/sparql")
 sparql.setQuery("""
 SELECT ?id
@@ -23,7 +22,6 @@ neighbor=c.id.to_list()
 
 avgrun=[]
 #for each 1st degree neighbour, do the same query to find 2nd degree neighbour and add to the list
-#also remove the line '?linkto  a  owl:Thing.' when use on local endpoint
 for a in range(len(neighbor)):
     
     start=time.time()
