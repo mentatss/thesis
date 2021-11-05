@@ -10,7 +10,6 @@ sparql = SPARQLWrapper("http://dbpedia.org/sparql")
 sparql.setQuery("""
 SELECT ?id
 WHERE { 
- ?linkto  a  owl:Thing.
  ?linkto dbo:wikiPageID ?id.
  ?origin    dbo:wikiPageWikiLink  ?linkto.
  ?origin  dbo:wikiPageID 91386.
@@ -31,7 +30,6 @@ for a in range(len(neighbor)):
     sparql.setQuery(f'''
         SELECT ?id
         WHERE {{ 
-            ?linkto  a  owl:Thing.
             ?linkto dbo:wikiPageID ?id.
             ?origin    dbo:wikiPageWikiLink  ?linkto.
             ?origin  dbo:wikiPageID {neighbor[a]}.
