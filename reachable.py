@@ -30,10 +30,11 @@ def backward_generator(sparql_obj, article):
     qres = sparql_obj.query().convert().decode('u8')
     return qres
 
+#Is dst reachable from src within d hops?
 def reachable(src, dst, d):
     # Return trivial answer when src is the same as dst
     if src == dst:
-        return True
+        return (True, 0)
 
     #Variable list
     queue_forward = [src]           #Querry queue for next depth
@@ -41,7 +42,7 @@ def reachable(src, dst, d):
     visited_forward = [src]         #Visited nodes from search
     visited_backward = [dst]
     next_depth = []                 #Helper list to gather next querry queue
-    depth_forward = 0               #Search depth
+    depth_forward = 0               #Current search depth
     depth_backward = 0
     sparql = SPARQLWrapper('http://127.0.0.1:8890/sparql')  #SPARQL Endpoint
 
@@ -62,8 +63,8 @@ def reachable(src, dst, d):
                 visited_forward += pd.read_csv(io.StringIO(qres)).id.to_list()
 
             #Update new queue for next depth
-            queue_forward = next_depth
-            next_depth = []
+            queue_forward = list(set(next_depth))
+            next_depth.clear()
 
         else:
             #Search in backward direction from dst
@@ -78,10 +79,12 @@ def reachable(src, dst, d):
                 visited_backward += pd.read_csv(io.StringIO(qres)).id.to_list()
 
             #Update new queue for next depth
-            queue_backward = next_depth
-            next_depth = []
+            queue_backward = list(set(next_depth))
+            next_depth.clear()
+
+    actual_depth = depth_forward + depth_backward
 
     #Both set have common elements (isdisjoint() == False) -> reachable 
     #Both set have no common elements (isdisjoint() == True) -> not reachable 
     #Return opposite of isdisjoint()
-    return (not set(visited_forward).isdisjoint(visited_backward))
+    return (not set(visited_forward).isdisjoint(visited_backward), actual_depth)
