@@ -33,10 +33,15 @@ def Opt_Rnd(query, bounded_time):
     #Knapsack solver (random)
     actual_time = 0
     profit = 0
-    while actual_time < bounded_time:
-        index = random.randint(0, len(query_set)-1)
-        profit += query_set.at[index, 'profit']
-        actual_time += query_set.at[index, 'runtime']
+
+    try:
+        while actual_time < bounded_time:
+            sample_query = query_set.sample()
+            profit += sample_query.iat[0,8]
+            actual_time += sample_query.iat[0,7]
+            query_set = query_set.drop(sample_query.index)
+    except: #error handling in case bounded is too large, all sample are taken
+        return(profit)
 
     return(profit)
 
