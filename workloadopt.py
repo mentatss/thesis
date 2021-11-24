@@ -17,11 +17,13 @@ def Opt_RF(query, prediction_model, bounded_time):
     query_set = query_set.reset_index(drop=True)
 
     #Knapsack solver (based on predicted runtime)
-    actual_time, profit = 0
+    actual_time = 0
+    profit = 0
     for index, row in query_set.iterrows():
-        while actual_time < bounded_time:
-            actual_time += row['runtime_prediction']
-            profit += row['profit']
+        actual_time += row['runtime_prediction']
+        profit += row['profit']
+        if actual_time > bounded_time:
+            break
             
     return(profit)
 
@@ -29,9 +31,10 @@ def Opt_Rnd(query, bounded_time):
     query_set = pd.read_csv(query)  #set of queries to be executed
 
     #Knapsack solver (random)
-    actual_time, profit = 0
+    actual_time = 0
+    profit = 0
     while actual_time < bounded_time:
-        index = random.randint(0, len(query_set))
+        index = random.randint(0, len(query_set)-1)
         profit += query_set.at[index, 'profit']
         actual_time += query_set.at[index, 'runtime']
 
@@ -50,11 +53,12 @@ def Opt_True(query, bounded_time):
     query_set = query_set.reset_index(drop=True)
     
     #Knapsack solver (based on real rumtime)
-    actual_time, profit = 0
+    actual_time = 0
+    profit = 0
     for index, row in query_set.iterrows():
-        while actual_time < bounded_time:
-            actual_time += row['runtime']
-            profit += row['profit']
+        actual_time += row['runtime']
+        profit += row['profit']
+        if actual_time > bounded_time:
+            break
 
     return(profit)
-
