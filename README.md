@@ -1,6 +1,6 @@
 # Bachelor thesis
 
-This repo contains the source code and dataset that were utilized during the writing of the bachelor thesis by Hai Nam Tran at the TUHH. 
+This repo contains the source code and dataset that were utilized during the writing of the bachelor thesis by Hai Nam Tran at the TUHH. You are highly encouraged to read the thesis first before exploring the repo.
 
 ## Requirement
 
